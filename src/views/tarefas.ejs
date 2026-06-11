@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Tarefas</title><link rel="stylesheet" href="/css/styles.css"></head>
+<body>
+<header><div class="inner"><h1>📋 Tarefas</h1><nav><span class="user">👤 <%= nome %></span><a href="/logout" style="color:#E74C3C">Sair</a></nav></div></header>
+<div class="container">
+  <% if (flash) { %><div class="flash"><%= flash %></div><% } %>
+  <div class="card"><h2>Adicionar Tarefa</h2>
+    <form method="POST" action="/tarefas" style="display:flex;gap:8px">
+      <input type="text" name="texto" placeholder="O que precisa fazer?" required style="flex:1;padding:10px;border-radius:6px;border:1px solid #2a3a5c;background:#0f3460;color:#e0e0e0;font-size:1rem">
+      <button type="submit" class="btn btn-primary" style="width:auto;padding:10px 20px">Adicionar</button>
+    </form>
+  </div>
+  <div class="card"><h2>📋 Suas Tarefas (<%= tarefas.length %>)</h2>
+    <% if (tarefas.length === 0) { %>
+      <p style="text-align:center;color:#8899aa;padding:20px">Nenhuma tarefa ainda. Adicione acima!</p>
+    <% } else { %>
+      <% tarefas.forEach(t => { %>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2a3a5c">
+        <form method="POST" action="/tarefas/<%= t.id %>/concluir">
+          <button type="submit" style="background:none;border:none;font-size:1.3rem;cursor:pointer"><%= t.concluida ? "✅" : "⬜" %></button>
+        </form>
+        <span style="flex:1;<%= t.concluida ? 'text-decoration:line-through;color:#8899aa' : '' %>"><%= t.texto %></span>
+        <span style="font-size:.75rem;color:#556"><%= t.criadaEm %></span>
+        <form method="POST" action="/tarefas/<%= t.id %>/remover">
+          <button type="submit" style="background:#E74C3C;color:white;border:none;padding:4px 10px;border-radius:4px;font-size:.8rem;cursor:pointer">✕</button>
+        </form>
+      </div>
+      <% }); %>
+    <% } %>
+  </div>
+</div></body></html>

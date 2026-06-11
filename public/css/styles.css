@@ -1,0 +1,28 @@
+
+:root{--bg:#1a1a2e;--card:#16213e;--text:#e0e0e0;--muted:#8899aa;--border:#2a3a5c;--accent:#E8621A;--green:#27AE60;--red:#E74C3C;--yellow:#F1C40F;--blue:#2980B9}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:500px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,var(--card),#1a1a3e);border-bottom:3px solid var(--accent);padding:16px 0}
+header .inner{max-width:500px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{color:var(--accent);font-size:1.3rem}
+header nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:.9rem}
+header nav a:hover{color:var(--accent)}
+header .user{color:var(--green);font-weight:600;font-size:.9rem}
+.flash{background:rgba(232,98,26,.15);border:1px solid var(--accent);border-radius:8px;padding:12px;margin:16px 0;text-align:center;color:var(--accent);font-weight:600}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.card h2{color:var(--accent);font-size:1.2rem;margin-bottom:16px;border-bottom:2px solid var(--border);padding-bottom:8px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:4px;font-weight:600;font-size:.9rem;color:var(--muted)}
+.form-group input{width:100%;padding:10px 14px;border-radius:6px;border:1px solid var(--border);background:#0f3460;color:var(--text);font-size:1rem}
+.form-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,98,26,.2)}
+.btn{display:inline-block;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:.95rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;width:100%;text-align:center}
+.btn-primary{background:var(--accent);color:white}
+.btn-primary:hover{opacity:.9}
+.btn-danger{background:var(--red);color:white}
+.link{text-align:center;margin-top:12px;font-size:.9rem}
+.link a{color:var(--accent);text-decoration:none}
+.link a:hover{text-decoration:underline}
+.center{text-align:center;margin:60px auto}
+.center h2{color:var(--accent);font-size:2rem;margin-bottom:8px}
+.center p{color:var(--muted);margin-bottom:20px}
