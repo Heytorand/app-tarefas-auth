@@ -42,36 +42,30 @@ tarefaRoutes.post("/tarefas", async (req: Request, res: Response) => {
 });
 
 // POST /tarefas/:id/concluir
-tarefaRoutes.post(
-  "/tarefas/:id/concluir",
-  async (req: Request, res: Response) => {
-    if (!req.session.userId) {
-      req.session.flash = "Faça login primeiro";
-      return res.redirect("/login");
-    }
-
-    const id = Number(req.params.id);
-
-    await TarefaModel.alternarConcluida(req.session.userId, id);
-
-    return res.redirect("/tarefas");
+tarefaRoutes.post("/tarefas/:id/concluir", async (req: Request, res: Response) => {
+  if (!req.session.userId) {
+    req.session.flash = "Faça login primeiro";
+    return res.redirect("/login");
   }
-);
+
+  const id = Number(req.params.id);
+
+  await TarefaModel.concluir(id, req.session.userId);
+
+  return res.redirect("/tarefas");
+});
 
 // POST /tarefas/:id/remover
-tarefaRoutes.post(
-  "/tarefas/:id/remover",
-  async (req: Request, res: Response) => {
-    if (!req.session.userId) {
-      req.session.flash = "Faça login primeiro";
-      return res.redirect("/login");
-    }
-
-    const id = Number(req.params.id);
-
-    await TarefaModel.remover(req.session.userId, id);
-
-    req.session.flash = "Tarefa removida!";
-    return res.redirect("/tarefas");
+tarefaRoutes.post("/tarefas/:id/remover", async (req: Request, res: Response) => {
+  if (!req.session.userId) {
+    req.session.flash = "Faça login primeiro";
+    return res.redirect("/login");
   }
-);
+
+  const id = Number(req.params.id);
+
+  await TarefaModel.remover(id, req.session.userId);
+
+  req.session.flash = "Tarefa removida!";
+  return res.redirect("/tarefas");
+});
