@@ -1,37 +1,77 @@
-// ============================================================
-// 🎯 TODO 11: Rotas de tarefas (PROTEGIDAS!)
-// ============================================================
 import { Router, Request, Response } from "express";
 import * as TarefaModel from "../models/tarefaModel";
 
 export const tarefaRoutes = Router();
 
-// 🎯 TODO 12: GET /tarefas — Listar tarefas do usuário logado
-// Se !session.userId: flash + redirect /login
-// TarefaModel.listarPorUsuario(session.userId)
-// Renderizar "tarefas" com { nome, tarefas, flash }
+// GET /tarefas
 tarefaRoutes.get("/tarefas", async (req: Request, res: Response) => {
-  // TODO: verificar login + listar tarefas
-  res.redirect("/login");
+  if (!req.session.userId) {
+    req.session.flash = "Você precisa estar logado";
+    return res.redirect("/login");
+  }
+
+  const tarefas = await TarefaModel.listarPorUsuario(req.session.userId);
+
+  res.render("tarefas", {
+    nome: req.session.userName,
+    tarefas,
+    flash: req.session.flash || null,
+  });
+
+  req.session.flash = null;
 });
 
-// 🎯 TODO 13: POST /tarefas — Adicionar tarefa
-// Validar texto não vazio
-// TarefaModel.adicionar(session.userId, texto)
-// Flash "Tarefa adicionada!"
+// POST /tarefas
 tarefaRoutes.post("/tarefas", async (req: Request, res: Response) => {
-  // TODO: adicionar tarefa
-  res.redirect("/tarefas");
+  if (!req.session.userId) {
+    req.session.flash = "Faça login primeiro";
+    return res.redirect("/login");
+  }
+
+  const { texto } = req.body;
+
+  if (!texto || texto.trim() === "") {
+    req.session.flash = "Digite uma tarefa válida";
+    return res.redirect("/tarefas");
+  }
+
+  await TarefaModel.adicionar(req.session.userId, texto);
+
+  req.session.flash = "Tarefa adicionada!";
+  return res.redirect("/tarefas");
 });
 
-// 🎯 TODO 14: POST /tarefas/:id/concluir — Toggle concluída
-tarefaRoutes.post("/tarefas/:id/concluir", async (req: Request, res: Response) => {
-  // TODO: concluir/desconcluir tarefa
-  res.redirect("/tarefas");
-});
+// POST /tarefas/:id/concluir
+tarefaRoutes.post(
+  "/tarefas/:id/concluir",
+  async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      req.session.flash = "Faça login primeiro";
+      return res.redirect("/login");
+    }
 
-// 🎯 TODO 15: POST /tarefas/:id/remover — Remover tarefa
-tarefaRoutes.post("/tarefas/:id/remover", async (req: Request, res: Response) => {
-  // TODO: remover tarefa
-  res.redirect("/tarefas");
-});
+    const id = Number(req.params.id);
+
+    await TarefaModel.alternarConcluida(req.session.userId, id);
+
+    return res.redirect("/tarefas");
+  }
+);
+
+// POST /tarefas/:id/remover
+tarefaRoutes.post(
+  "/tarefas/:id/remover",
+  async (req: Request, res: Response) => {
+    if (!req.session.userId) {
+      req.session.flash = "Faça login primeiro";
+      return res.redirect("/login");
+    }
+
+    const id = Number(req.params.id);
+
+    await TarefaModel.remover(req.session.userId, id);
+
+    req.session.flash = "Tarefa removida!";
+    return res.redirect("/tarefas");
+  }
+);
